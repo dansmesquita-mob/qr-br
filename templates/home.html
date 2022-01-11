@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Gere seu QrCode</title>
+    <style>
+        div {
+            margin: 1em 1em 0.5em 0.5em;
+        }
+        .btn-inline{
+            display: inline-block;
+        }
+        .dft-btn{
+            background-color: blue;
+            border: none;
+            width: 150px;
+            height: 35px;
+            color: white;
+            border-radius: 5px 5px 5px 5px;
+            font-weight:bold;
+        }
+        .dft-input{
+            height: 30px;
+            width: 70%;
+        }
+        .dft-input-sub{
+            height: 30px;
+        }
+        .dft-fonte{
+            font-weight:bold;
+            font-family: "Arial";
+            font-size:14px;
+        }
+        .dft-fonte-sub{
+            font-family: "Arial";
+            font-size:12px;
+        }
+    </style>
+</head>
+<body>
+      <div>
+          <div>
+              <div>
+                  <div class="dft-fonte">Informe o link ou informação que constará no Qr Code:</div>
+                  <form action="/qrcode" method="POST">
+                      <input  class="dft-input" type="text" id="data-qr" name="data">
+                      <button class="dft-btn" type="submit">Gerar qcode</button>
+                  </form>
+              </div>
+              <div class="dft-fonte-sub">
+                  <input onclick="chkWhats()" id="check-whats" type="checkbox"> Gerar link Whatsapp (Opcional)
+              </div>
+              <div id="cmp-celular">
+                <div class="dft-fonte">Digite o número do seu celular. Ex: 19999999999 (DDD+CELULAR):</div>
+                <input class="dft-input-sub" id="cel-input">
+                <button class="dft-btn" onclick="fnWhatsapp()">Gerar Link Whatsapp</button>
+              </div>
+          </div>
+          {% if dataqr %}
+              <div class="dft-fonte">
+                  Qr code gerado com a informação a seguir: {{ dataqr }}
+              </div>
+          {% endif %}
+          {% if img %}
+              <div>
+                <img src="{{ img }}" width="100px" height="100px">
+              </div>
+              <div class="dft-fonte">
+                  Base64 qrcode (data:image/png):
+              </div>
+              <div>
+                  <textarea rows="15" cols="50">
+                      {{ img }}
+                  </textarea>
+              </div>
+              <div>
+                  <div class="btn-inline">
+                    <a download="base64.txt" href="data:text/plain;base64,{{ bs64txt }}" title="report">
+                        <button class="dft-btn">Download TXT</button>
+                    </a>
+                  </div>
+                  <div class="btn-inline">
+                    <a download="qrcodePNG.png" href="{{ img }}" title="base64">
+                        <button class="dft-btn">Download Imagem</button>
+                    </a>
+                  </div>
+             </div>
+          {% endif %}
+      </div>
+      <script>
+            var cmpCel = document.getElementById("cmp-celular");
+            /*default visibility*/
+            cmpCel.style.visibility = "hidden";
+            function chkWhats()
+            {
+                var chk = document.getElementById("check-whats");
+                if(chk.checked){
+                    cmpCel.style.visibility ="visible";
+                } else {
+                    cmpCel.style.visibility ="hidden";
+                }
+            }
+            function fnWhatsapp()
+            {
+                var apiWhatsapp = "https://api.whatsapp.com/send?phone=55"
+                var CelInput = document.getElementById("cel-input").value;
+                var CelInput = apiWhatsapp + CelInput
+                var dataQr = document.getElementById("data-qr");
+
+                dataQr.value = CelInput;
+            }
+      </script>
+</body>
+</html>
