@@ -8,7 +8,6 @@ qrcode = QRcode(app)
 app.secret_key = 'notsharemycodenever'
 
 
-
 @app.route('/', methods=["GET", "POST"])
 def main():
     return render_template('home.html')
@@ -28,3 +27,5 @@ def qr():
             return render_template('home.html', dataqr=dataqr, img=img, bs64txt=bs64txt)
         except Exception as erro:
             return render_template('erro.html', erro=erro)
+    else:
+        return render_template("home.html")
